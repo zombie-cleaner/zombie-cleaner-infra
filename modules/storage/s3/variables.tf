@@ -4,16 +4,9 @@ variable region {
 }
 
 variable lambda_functions {
-    type = map(object({
+  type = map(object({
             bucket_name = string
             versioning = optional(bool, false)
             tags = optional(map(string), {}) 
-        }))
-    }
-
-variable "remote_backend" {
-    type = object({
-      s3_bucket_name = string
-      object_key_path = string
-    })
-}
+      }))
+  }
