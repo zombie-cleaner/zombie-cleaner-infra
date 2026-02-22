@@ -1,9 +1,15 @@
-variable "rds_db_database_identifier" {
-  description = "rds database name"
+variable "globalConfigs" {
+  type = object({
+    region      = string,
+    environment = string,
+    appName     = string
+  })
 }
-variable "rds_db_username" {
-  description = "username"
-}
-variable "rds_db_password" {
-  description = "database password"
+
+variable "rdsDefaultDBConfigs" {
+  type = object({
+    databaseIdentifier = string
+    databaseUsername   = string
+    databasePassword   = string
+  })
 }

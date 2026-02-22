@@ -1,11 +1,17 @@
-provider "aws"{
-    region = var.region
+# global configurations 
+provider "aws" {
+  region = var.globalConfigs.region
 }
 
-# # remote backend configuration
-# backend "remote_backend" {
-    
-# }
+# remote backend configuration
+terraform {
+  backend "s3" {
+    bucket       = "state-backend-at-s3"
+    key          = "env/dev/terraform.tfstate"
+    region       = "us-east-1"
+    use_lockfile = true
+  }
+}
 
 
 # # s3 buckets module 
@@ -23,10 +29,9 @@ provider "aws"{
 # }
 
 # RDS instance
-module "rds_instance" {
-    source = "../../modules/storage/rds"
+module "rds" {
+  source = "../../modules/storage/rds"
 
-    rds_db_database_identifier  = var.rds_db_database_identifier
-    rds_db_password = var.rds_db_password
-    rds_db_username = var.rds_db_username
+  rdsDefaultDBConfigs = var.rdsDefaultDBConfigs
+  globalConfigs       = var.globalConfigs
 }

@@ -1,8 +1,23 @@
-variable "region" {
-  type        = string
-  description = "region of aws resources"
+# global configurations =======================================================================
+variable "globalConfigs" {
+  type = object({
+    region      = string,
+    environment = string,
+    appName     = string
+  })
 }
 
+# remotestate configurations =======================================================================
+variable "remoteStateConfigs" {
+  type = object({
+    bucket = string
+    key    = string
+  })
+}
+
+# Compute related services ========================================================================
+
+# Lambda
 # variable lambda_functions {
 #     type = map(object({
 #             bucket_name = string
@@ -11,19 +26,16 @@ variable "region" {
 #         }))
 #     }
 
-# variable "remote_backend" {
-#     type = object({
-#       s3_bucket_name = string
-#       object_key_path = string
-#     })
-# }
 
-variable "rds_db_database_identifier" {
-  description = "rds database name"
-}
-variable "rds_db_username" {
-  description = "username"
-}
-variable "rds_db_password" {
-  description = "database password"
+# storage related services =======================================================================
+
+# S3
+
+# RDS
+variable "rdsDefaultDBConfigs" {
+  type = object({
+    databaseIdentifier = string
+    databaseUsername   = string
+    databasePassword   = string
+  })
 }
