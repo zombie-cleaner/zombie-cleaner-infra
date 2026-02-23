@@ -13,6 +13,16 @@ terraform {
   }
 }
 
+# Compute module 
+# lambda
+module "lambda"{
+  source = "../../modules/compute/lambda"
+
+  # variables
+
+  # global configs
+  
+}
 
 # # s3 buckets module 
 # module "s3_buckets" {
