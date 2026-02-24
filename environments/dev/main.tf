@@ -24,19 +24,25 @@ module "lambda"{
   
 }
 
-# # s3 buckets module 
-# module "s3_buckets" {
-#     # path
-#     source = "../../modules/storage/s3"
+# Security and governance
+# Iam 
+module "iam"{
+  # source
+  source = "../../modules/securityAndGovernance/iam"
 
-#     # Environment variables 
+  # variables
+  platformAccessPolicyBucket = module.s3_buckets.platformAccessBucketName
+}
 
-#     # map of lambda functions 
-#     lambda_functions = var.lambda_functions
+# s3 buckets module 
+module "s3_buckets" {
+    # path
+    source = "../../modules/storage/s3"
 
-#     # region of aws resources 
-#     region = var.region
-# }
+    # region of aws resources 
+    globalConfigs = var.globalConfigs
+    platformAccessPolicyBucket = var.platformAccessPolicyBucket
+}
 
 # RDS instance
 module "rds" {

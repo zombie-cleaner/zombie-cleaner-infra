@@ -30,7 +30,11 @@ variable "remoteStateConfigs" {
 # storage related services =======================================================================
 
 # S3
-
+variable "platformAccessPolicyBucket" {
+  type = object({
+    bucket = string
+  })
+}
 # RDS
 variable "rdsDefaultDBConfigs" {
   type = object({
