@@ -1,8 +1,9 @@
 variable "globalConfigs" {
   type = object({
-    region      = string,
-    environment = string,
-    appName     = string
+    region           = string,
+    environment      = string,
+    policiesLocation = string
+    appName          = string
   })
 }
 

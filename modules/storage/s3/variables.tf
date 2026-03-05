@@ -1,12 +1,15 @@
-variable region {
-  type        = string
-  description = "region of aws resources"
+variable "globalConfigs" {
+  type = object({
+    region           = string,
+    environment      = string,
+    appName          = string
+    policiesLocation = string
+  })
 }
 
-variable lambda_functions {
-  type = map(object({
-            bucket_name = string
-            versioning = optional(bool, false)
-            tags = optional(map(string), {}) 
-      }))
-  }
+variable "platformAccessPolicyBucket" {
+  type = object({
+    bucket     = string
+    policyFile = string
+  })
+}

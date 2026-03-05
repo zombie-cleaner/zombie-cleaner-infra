@@ -1,17 +1,10 @@
 # global configurations =======================================================================
 variable "globalConfigs" {
   type = object({
-    region      = string,
-    environment = string,
-    appName     = string
-  })
-}
-
-# remotestate configurations =======================================================================
-variable "remoteStateConfigs" {
-  type = object({
-    bucket = string
-    key    = string
+    region           = string
+    environment      = string
+    appName          = string
+    policiesLocation = string
   })
 }
 
@@ -32,7 +25,8 @@ variable "remoteStateConfigs" {
 # S3
 variable "platformAccessPolicyBucket" {
   type = object({
-    bucket = string
+    bucket     = string
+    policyFile = string
   })
 }
 # RDS

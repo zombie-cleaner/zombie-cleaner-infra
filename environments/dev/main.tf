@@ -15,33 +15,35 @@ terraform {
 
 # Compute module 
 # lambda
-module "lambda"{
+module "lambda" {
   source = "../../modules/compute/lambda"
 
   # variables
 
   # global configs
-  
+
 }
 
 # Security and governance
 # Iam 
-module "iam"{
+module "iam" {
   # source
   source = "../../modules/securityAndGovernance/iam"
 
   # variables
+  # globals 
+  globalConfigs              = var.globalConfigs
   platformAccessPolicyBucket = module.s3_buckets.platformAccessBucketName
 }
 
 # s3 buckets module 
 module "s3_buckets" {
-    # path
-    source = "../../modules/storage/s3"
+  # path
+  source = "../../modules/storage/s3"
 
-    # region of aws resources 
-    globalConfigs = var.globalConfigs
-    platformAccessPolicyBucket = var.platformAccessPolicyBucket
+  # region of aws resources 
+  globalConfigs              = var.globalConfigs
+  platformAccessPolicyBucket = var.platformAccessPolicyBucket
 }
 
 # RDS instance
