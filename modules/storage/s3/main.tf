@@ -27,5 +27,8 @@ resource "aws_s3_object" "platformAccessPolicyObject" {
   bucket       = aws_s3_bucket.platform_access_policy_bucket.id
   key          = "platformAccessPolicy.json"
   content_type = "text/json"
+
+  # Adding a hash of the file content to force updates when the file changes
+  etag = filemd5("${var.globalConfigs.policiesLocation}${var.platformAccessPolicyBucket.policyFile}")
 }
 

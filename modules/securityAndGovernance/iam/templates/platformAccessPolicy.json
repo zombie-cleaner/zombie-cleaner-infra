@@ -1,24 +1,24 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Role for MyApp to access limited AWS resources",
+  "Description": "Role for idleZero to access limited AWS resources",
   "Parameters": {
     "ExternalId": {
       "Type": "String",
-      "Description": "External ID provided by MyApp"
+      "Description": "External ID provided by idleZero for secure cross-account access"
     }
   },
   "Resources": {
-    "MyAppAccessRole": {
+    "IdleZeroAccessRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
-        "RoleName": "MyAppCrossAccountRole",
+        "RoleName": "IdleZeroAccessRole",
         "AssumeRolePolicyDocument": {
           "Version": "2012-10-17",
           "Statement": [
             {
               "Effect": "Allow",
               "Principal": {
-                "AWS": "arn:aws:iam::YOUR_APP_ACCOUNT_ID:root"
+                "AWS": "arn:aws:iam::816881850355:root"
               },
               "Action": "sts:AssumeRole",
               "Condition": {
@@ -31,7 +31,7 @@
         },
         "Policies": [
           {
-            "PolicyName": "MyAppPermissions",
+            "PolicyName": "IdleZeroPermissions",
             "PolicyDocument": {
               "Version": "2012-10-17",
               "Statement": [
@@ -54,7 +54,7 @@
   },
   "Outputs": {
     "RoleArn": {
-      "Value": { "Fn::GetAtt": ["MyAppAccessRole", "Arn"] }
+      "Value": { "Fn::GetAtt": ["IdleZeroAccessRole", "Arn"] }
     }
   }
 }
