@@ -11,5 +11,6 @@ resource "aws_db_instance" "java_fall_sprint_db" {
   max_allocated_storage = 22
   apply_immediately     = false
 
+  publicly_accessible = true
   skip_final_snapshot = true
 }
