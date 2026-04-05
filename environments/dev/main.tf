@@ -21,7 +21,19 @@ module "lambda" {
   # variables
 
   # global configs
+  globalConfigs = var.globalConfigs
+}
 
+# miscellaneous
+# event bridge
+module "eventbridge" {
+  # source
+  source = "../../modules/miscellaneous/eventBridge"
+
+  # variables
+  # globals
+  globalConfigs               = var.globalConfigs
+  lambda_arns_for_eventbridge = module.lambda.lambda_arns_for_eventbridge
 }
 
 # Security and governance
