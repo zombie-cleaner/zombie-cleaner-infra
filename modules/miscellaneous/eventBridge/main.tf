@@ -25,7 +25,7 @@ resource "aws_cloudwatch_event_rule" "allRules" {
 resource "aws_cloudwatch_event_target" "mapTargets" {
   for_each = { for event in local.events : event.name => event }
 
-  rule      = "${aws_cloudwatch_event_rule.allRules[each.key].name}-${var.globalConfigs.environment}-${var.globalConfigs.appName}"
+  rule      = aws_cloudwatch_event_rule.allRules[each.key].name
   target_id = "${each.key}-target"
   arn       = each.value.lambda_arn
 }
