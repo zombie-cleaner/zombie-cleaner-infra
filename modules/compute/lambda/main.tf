@@ -16,8 +16,8 @@ data "archive_file" "lambda_zips" {
   for_each = { for lambda in local.lambda_functions : lambda.name => lambda }
 
   type        = "zip"
-  source_dir  = each.value.code_path
-  output_path = "${each.value.code_path}/${each.value.name}.zip"
+  source_dir  = "${path.module}/functions/${each.value.name}"
+  output_path = "${path.module}/functions/${each.value.name}.zip"
   excludes    = ["**/*.zip"]
 }
 
@@ -28,8 +28,8 @@ resource "aws_lambda_function" "lambdaFunctions" {
   description      = each.value.description
   handler          = each.value.handler
   runtime          = each.value.runtime
-  filename         = "${each.value.code_path}/${each.value.name}.zip"
-  source_code_hash = filebase64sha256("${each.value.code_path}/${each.value.name}.zip")
+  filename         = "${path.module}/functions/${each.value.name}.zip"
+  source_code_hash = filebase64sha256("${path.module}/functions/${each.value.name}.zip")
   role             = aws_iam_role.lambda_execution_role.arn
   layers           = each.value.layers
 }
