@@ -5,9 +5,7 @@ locals {
       "description" : "This is the first event",
       "lambda_arn" : var.lambda_arns_for_eventbridge["delete_resource"],
       "event_pattern" : {
-        "detail" : {
-          type = ["DELETE_RESOURCE"]
-        }
+        "detail-type" : ["DELETE_RESOURCE"]
       }
     }
   ]
