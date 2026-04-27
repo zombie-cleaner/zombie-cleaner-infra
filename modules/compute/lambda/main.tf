@@ -7,7 +7,17 @@ locals {
       runtime           = "nodejs18.x",
       code_path         = "${path.module}/functions/delete_resource"
       allow_eventbridge = true
-      layers            = []
+      layers            = ["api-helper", "package"]
+    }
+  ]
+  lambda_layers = [
+    {
+      name      = "api-helper"
+      code_path = "${path.module}/layers/api-helper"
+    },
+    {
+      name      = "package"
+      code_path = "${path.module}/layers/package"
     }
   ]
 }
@@ -20,6 +30,23 @@ data "archive_file" "lambda_zips" {
   output_path = "${path.module}/functions/${each.value.name}.zip"
   excludes    = ["**/*.zip"]
 }
+data "archive_file" "lambda_layer_zips" {
+  for_each = { for layer in local.lambda_layers : layer.name => layer }
+
+  type        = "zip"
+  source_dir  = "${path.module}/layers/${each.value.name}"
+  output_path = "${path.module}/layers/${each.value.name}.zip"
+  excludes    = ["**/*.zip"]
+}
+
+resource "aws_lambda_layer_version" "lambdaLayers" {
+  for_each = { for layer in local.lambda_layers : layer.name => layer }
+
+  filename            = "${path.module}/layers/${each.value.name}.zip"
+  layer_name          = "${each.value.name}-${var.globalConfigs.environment}-${var.globalConfigs.appName}"
+  source_code_hash    = data.archive_file.lambda_layer_zips[each.key].output_base64sha256
+  compatible_runtimes = ["nodejs18.x"]
+}
 
 resource "aws_lambda_function" "lambdaFunctions" {
   for_each = { for lambda in local.lambda_functions : lambda.name => lambda }
@@ -29,9 +56,9 @@ resource "aws_lambda_function" "lambdaFunctions" {
   handler          = each.value.handler
   runtime          = each.value.runtime
   filename         = "${path.module}/functions/${each.value.name}.zip"
-  source_code_hash = filebase64sha256("${path.module}/functions/${each.value.name}.zip")
+  source_code_hash = data.archive_file.lambda_zips[each.key].output_base64sha256
   role             = aws_iam_role.lambda_execution_role.arn
-  layers           = each.value.layers
+  layers           = [for layer in each.value.layers : aws_lambda_layer_version.lambdaLayers[layer].arn]
 }
 
 resource "aws_lambda_permission" "allow_eventbridge" {
