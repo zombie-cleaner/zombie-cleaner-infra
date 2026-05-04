@@ -11,7 +11,7 @@ export const handler = async (event) => {
 
     await deleteResource(
       detail?.resourceType,
-      detail?.resourceId,
+      detail?.resourceIdentifier,
       detail?.options,
     );
     return makeResponse(200, { message: "Resource deleted successfully" });
@@ -19,20 +19,4 @@ export const handler = async (event) => {
     console.error("🔴 Error deleting resource:", error);
     return makeResponse(500, { message: "Internal Server Error" });
   }
-};
-
-const identifyResource = (detail) => {
-  // Implement logic to identify the resource to delete based on event details
-  return detail.resourceId; // Example: assuming the resource ID is provided in the event detail
-};
-
-const deleteResource = async (resourceId) => {
-  // Implement logic to delete the resource, e.g., call an API or perform database operations
-  console.log(`Deleting resource with ID: ${resourceId}`);
-  // Simulate deletion logic here
-};
-
-const getAuthorized = async (event) => {
-  // Implement logic to check if the request is authorized, e.g., validate tokens or permissions
-  return true; // Example: assuming all requests are authorized for simplicity
 };

@@ -2,10 +2,18 @@ const {
   CloudWatchLogsClient,
   DeleteLogGroupCommand,
 } = require("@aws-sdk/client-cloudwatch-logs");
-const client = new CloudWatchLogsClient({});
 
-module.exports = {
-  async delete(logGroupName) {
-    await client.send(new DeleteLogGroupCommand({ logGroupName }));
-  },
+const deleteResource = async (
+  resourceIdentifier,
+  credentials,
+  options = {},
+) => {
+  const client = new CloudWatchLogsClient({
+    credentials,
+  });
+  await client.send(
+    new DeleteLogGroupCommand({ logGroupName: resourceIdentifier }),
+  );
 };
+
+module.exports = { delete: deleteResource };
