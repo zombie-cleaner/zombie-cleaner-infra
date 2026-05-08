@@ -8,11 +8,9 @@ locals {
       code_path         = "${path.module}/functions/delete_resource"
       allow_eventbridge = true
       layers            = ["api-helper", "package"]
-      environment_variables = [
-        {
-          "REGION" : "${var.globalConfigs.region}"
-        },
-      ]
+      environment_variables = {
+        "REGION" : "${var.globalConfigs.region}"
+      }
     }
   ]
   lambda_layers = [
