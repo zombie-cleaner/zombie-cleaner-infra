@@ -8,6 +8,11 @@ locals {
       code_path         = "${path.module}/functions/delete_resource"
       allow_eventbridge = true
       layers            = ["api-helper", "package"]
+      environment_variables = [
+        {
+          "REGION" : "${var.globalConfigs.region}"
+        },
+      ]
     }
   ]
   lambda_layers = [
@@ -59,6 +64,10 @@ resource "aws_lambda_function" "lambdaFunctions" {
   source_code_hash = data.archive_file.lambda_zips[each.key].output_base64sha256
   role             = aws_iam_role.lambda_execution_role.arn
   layers           = [for layer in each.value.layers : aws_lambda_layer_version.lambdaLayers[layer].arn]
+
+  environment {
+    variables = each.value.environment_variables
+  }
 }
 
 resource "aws_lambda_permission" "allow_eventbridge" {

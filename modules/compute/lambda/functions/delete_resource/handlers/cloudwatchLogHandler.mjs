@@ -1,9 +1,9 @@
-const {
+import {
   CloudWatchLogsClient,
   DeleteLogGroupCommand,
-} = require("@aws-sdk/client-cloudwatch-logs");
+} from "@aws-sdk/client-cloudwatch-logs";
 
-const deleteResource = async (
+export const deleteResource = async (
   resourceIdentifier,
   credentials,
   options = {},
@@ -15,5 +15,3 @@ const deleteResource = async (
     new DeleteLogGroupCommand({ logGroupName: resourceIdentifier }),
   );
 };
-
-module.exports = { delete: deleteResource };
