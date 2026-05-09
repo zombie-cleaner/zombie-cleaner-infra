@@ -1,10 +1,4 @@
-const defaultHeaders = {
-  "Content-Type": "application/json",
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Credentials": true,
-};
-
-export const makeResponse = (statusCode, body = null, headers = {}) => {
+export const makeResponse = (statusCode, body = null) => {
   return {
     statusCode,
     body:
@@ -13,6 +7,5 @@ export const makeResponse = (statusCode, body = null, headers = {}) => {
         : typeof body === "object"
           ? JSON.stringify(body)
           : String(body),
-    headers: { ...defaultHeaders, ...headers },
   };
 };
