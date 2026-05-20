@@ -4,7 +4,7 @@ import { deleteResource } from "./resource_deleter.mjs";
 export const handler = async (event) => {
   try {
     const {
-      detail,
+      detail: detail,
       "detail-type": detailType,
       "auth-creds": authCreds,
     } = event;
