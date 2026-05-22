@@ -25,7 +25,7 @@ export const deleteResource = async (
 
   console.log(`Deleting [${resourceType}]: ${resourceIdentifier}`);
   const credentials = await getCredentials(authCreds);
-  await handler.delete(resourceIdentifier, credentials, options);
+  await handler(resourceIdentifier, credentials, options);
   console.log(`Successfully deleted [${resourceType}]: ${resourceIdentifier}`);
 };
 

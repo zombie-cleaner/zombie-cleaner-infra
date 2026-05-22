@@ -18,14 +18,9 @@
             {
               "Effect": "Allow",
               "Principal": {
-                "AWS": "arn:aws:iam::816881850355:root"
+                "AWS": "arn:aws:iam::816881850355:role/lambda_execution_role-dev-zombie-cleaner"
               },
-              "Action": "sts:AssumeRole",
-              "Condition": {
-                "StringEquals": {
-                  "sts:ExternalId": { "Ref": "ExternalId" }
-                }
-              }
+              "Action": "sts:AssumeRole"
             }
           ]
         },
