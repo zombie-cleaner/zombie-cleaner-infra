@@ -1,6 +1,8 @@
 resource "aws_db_instance" "java_fall_sprint_db" {
   identifier = "${var.rdsDefaultDBConfigs.databaseIdentifier}-${var.globalConfigs.environment}-${var.globalConfigs.appName}"
 
+  deletion_protection = false
+
   engine            = "mysql"
   instance_class    = "db.t4g.micro"
   allocated_storage = 20

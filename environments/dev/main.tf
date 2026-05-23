@@ -59,9 +59,9 @@ module "s3_buckets" {
 }
 
 # RDS instance
-module "rds" {
-  source = "../../modules/storage/rds"
+# module "rds" {
+#   source = "../../modules/storage/rds"
 
-  rdsDefaultDBConfigs = var.rdsDefaultDBConfigs
-  globalConfigs       = var.globalConfigs
-}
+#   rdsDefaultDBConfigs = var.rdsDefaultDBConfigs
+#   globalConfigs       = var.globalConfigs
+# }
