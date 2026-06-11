@@ -1,62 +1,46 @@
-import { makeResponse } from "/opt/nodejs/helper.mjs";
+import { 
+  success, 
+  badRequest, 
+  forbidden, 
+  handleApiError 
+} from "/opt/nodejs/helper.mjs";
 import { deleteResource } from "./resource_deleter.mjs";
 
 export const handler = async (event) => {
   try {
     const {
-      detail: detail,
+      detail,
       "detail-type": detailType,
       "auth-creds": authCreds,
     } = event;
 
     const validationError = validator(detail, detailType, authCreds);
+    if (validationError) return validationError;
 
-    if (validationError) {
-      return validationError;
-    }
-
-    await deleteResource(
+    const result = await deleteResource(
       detail.resourceType,
       detail.resourceIdentifier,
       authCreds,
       detail.options,
     );
 
-    return makeResponse(200, {
-      message: "Resource deleted successfully",
-    });
+    return result;
   } catch (error) {
-    console.error("🔴 Error deleting resource:", error);
-
-    return makeResponse(500, {
-      message: "Internal Server Error",
-    });
+    return handleApiError(error, "in handler");
   }
 };
 
 function validator(detail, detailType, authCreds) {
   if (detailType !== "DELETE_RESOURCE") {
-    console.warn("⚠️ Received unsupported event type:", detailType);
-
-    return makeResponse(400, {
-      message: "Unsupported event type",
-    });
+    return badRequest(`Unsupported event type: ${detailType}`);
   }
 
   if (!authCreds?.roleArn || !authCreds?.externalId) {
-    console.warn("⚠️ Invalid authentication");
-
-    return makeResponse(403, {
-      message: "Invalid authentication",
-    });
+    return forbidden("Missing or invalid authentication credentials");
   }
 
   if (!detail?.resourceIdentifier || !detail?.resourceType) {
-    console.warn("⚠️ Invalid resource details");
-
-    return makeResponse(400, {
-      message: "Invalid resource details",
-    });
+    return badRequest("Missing resource identifier or type");
   }
 
   return null;
