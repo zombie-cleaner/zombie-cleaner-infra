@@ -1,20 +1,16 @@
-import { 
-  success, 
-  badRequest, 
-  forbidden, 
-  handleApiError 
+import {
+  success,
+  badRequest,
+  forbidden,
+  handleApiError,
 } from "/opt/nodejs/helper.mjs";
 import { deleteResource } from "./resource_deleter.mjs";
 
 export const handler = async (event) => {
   try {
-    const {
-      detail,
-      "detail-type": detailType,
-      "auth-creds": authCreds,
-    } = event;
+    const { detail, "detail-type": detailType } = event;
 
-    const validationError = validator(detail, detailType, authCreds);
+    const validationError = validator(detail, detailType, detail?.authCreds);
     if (validationError) return validationError;
 
     const result = await deleteResource(
