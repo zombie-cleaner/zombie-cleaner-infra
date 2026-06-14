@@ -69,9 +69,7 @@ resource "aws_lambda_function" "lambdaFunctions" {
 }
 
 resource "aws_lambda_permission" "allow_eventbridge" {
-  for_each = { for lambda in local.lambda_functions : lambda.name => lambda if lambda.allow_eventbridge }
-
-  statement_id  = "AllowExecutionFromEventBridge"
+  for_each      = { for lambda in local.lambda_functions : lambda.name => lambda if lambda.allow_eventbridge }
   action        = "lambda:InvokeFunction"
   function_name = "${each.value.name}-${var.globalConfigs.environment}-${var.globalConfigs.appName}"
   principal     = "events.amazonaws.com"
