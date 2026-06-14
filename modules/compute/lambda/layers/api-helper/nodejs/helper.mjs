@@ -1,4 +1,5 @@
 import { STSClient, AssumeRoleCommand } from "@aws-sdk/client-sts";
+import { log } from "./logger.mjs";
 
 export const makeResponse = (statusCode, body = null) => {
   return {
@@ -22,7 +23,7 @@ export const notFound = (message = "Not Found") => makeResponse(404, { message }
 export const internalError = (message = "Internal Server Error") => makeResponse(500, { message });
 
 export const handleApiError = (error, context = "") => {
-  console.error(`🔴 Error ${context}:`, error);
+  log.error(`Error ${context}:`, error);
 
   const name = error?.name || error?.code;
   const message = error?.message || "An unexpected error occurred";

@@ -1,4 +1,5 @@
 import { getCrossAccountCredentials, badRequest } from "/opt/nodejs/helper.mjs";
+import { log } from "/opt/nodejs/logger.mjs";
 import { deleteResource as cloudWatchDeleter } from "./handlers/cloudwatchLogHandler.mjs";
 
 const handlers = {
@@ -18,7 +19,7 @@ export const deleteResource = async (
     return badRequest(`Unknown resource type: "${resourceType}". Supported: ${Object.keys(handlers).join(", ")}`);
   }
 
-  console.log(`Deleting [${resourceType}]: ${resourceIdentifier}`);
+  log.info(`Deleting [${resourceType}]: ${resourceIdentifier}`);
   
   // Note: credentials retrieval is moved to helper layer
   const credentials = await getCrossAccountCredentials(authCreds);

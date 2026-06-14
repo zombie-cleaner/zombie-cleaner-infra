@@ -9,8 +9,8 @@ import { deleteResource } from "./resource_deleter.mjs";
 export const handler = async (event) => {
   try {
     const { detail, "detail-type": detailType } = event;
-
-    const validationError = validator(detail, detailType, detail?.authCreds);
+    const authCreds = detail?.["auth-creds"];
+    const validationError = validator(detail, detailType, authCreds);
     if (validationError) return validationError;
 
     const result = await deleteResource(
