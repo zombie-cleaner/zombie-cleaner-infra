@@ -32,8 +32,21 @@ module "eventbridge" {
 
   # variables
   # globals
-  globalConfigs               = var.globalConfigs
+  globalConfigs = var.globalConfigs
+
+  # lambda information (arn) for target
   lambda_arns_for_eventbridge = module.lambda.lambda_arns_for_eventbridge
+}
+
+# Observability
+# Cloudwatch 
+module "cloudwatch" {
+  # source
+  source = "../../modules/observability/cloudwatch"
+
+  # variables
+  # globals 
+  globalConfigs = var.globalConfigs
 }
 
 # Security and governance
