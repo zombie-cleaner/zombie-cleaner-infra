@@ -11,7 +11,19 @@ locals {
       environment_variables = {
         "REGION" : "${var.globalConfigs.region}"
       }
-    }
+    },
+    # {
+    #   name              = "schedule_resource",
+    #   description       = "Lambda function to handle resource updation events",
+    #   handler           = "index.handler",
+    #   runtime           = "nodejs18.x",
+    #   code_path         = "${path.module}/functions/update_resource"
+    #   allow_eventbridge = true
+    #   layers            = ["api-helper", "package"]
+    #   environment_variables = {
+    #     "REGION" : "${var.globalConfigs.region}"
+    #   }
+    # }
   ]
   lambda_layers = [
     {
