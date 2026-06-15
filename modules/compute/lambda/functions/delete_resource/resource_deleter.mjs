@@ -16,13 +16,15 @@ export const deleteResource = async (
   const handler = handlers[resourceType];
 
   if (!handler) {
-    return badRequest(`Unknown resource type: "${resourceType}". Supported: ${Object.keys(handlers).join(", ")}`);
+    const msg = `Unknown resource type: "${resourceType}". Supported: ${Object.keys(handlers).join(", ")}`;
+    log.error(msg);
+    return badRequest(msg);
   }
 
   log.info(`Deleting [${resourceType}]: ${resourceIdentifier}`);
-  
+
   // Note: credentials retrieval is moved to helper layer
   const credentials = await getCrossAccountCredentials(authCreds);
-  
+
   return await handler(resourceIdentifier, credentials, options);
 };

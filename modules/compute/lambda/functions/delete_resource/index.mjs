@@ -11,6 +11,7 @@ export const handler = async (event) => {
     const { detail, "detail-type": detailType } = event;
     const authCreds = detail?.["auth-creds"];
     const validationError = validator(detail, detailType, authCreds);
+    log.error("There is validation error : ", validationError);
     if (validationError) return validationError;
 
     const result = await deleteResource(
@@ -28,14 +29,17 @@ export const handler = async (event) => {
 
 function validator(detail, detailType, authCreds) {
   if (detailType !== "DELETE_RESOURCE") {
+    log.error(`Unsupported event type: ${detailType}`);
     return badRequest(`Unsupported event type: ${detailType}`);
   }
 
   if (!authCreds?.roleArn || !authCreds?.externalId) {
+    log.error("Missing or invalid authentication credentials");
     return forbidden("Missing or invalid authentication credentials");
   }
 
   if (!detail?.resourceIdentifier || !detail?.resourceType) {
+    log.error("Missing resource identifier or type");
     return badRequest("Missing resource identifier or type");
   }
 

@@ -12,17 +12,20 @@ export const deleteResource = async (
   try {
     const client = new CloudWatchLogsClient({
       credentials,
-      region: process.env.REGION || process.env.AWS_REGION
+      region: process.env.REGION || process.env.AWS_REGION,
     });
 
     await client.send(
       new DeleteLogGroupCommand({ logGroupName: resourceIdentifier }),
     );
-
+    log.success(`Log group ${resourceIdentifier} deleted successfully`);
     return success({
       message: `Log group ${resourceIdentifier} deleted successfully`,
     });
   } catch (error) {
-    return handleApiError(error, `deleting cloudwatch-log ${resourceIdentifier}`);
+    return handleApiError(
+      error,
+      `deleting cloudwatch-log ${resourceIdentifier}`,
+    );
   }
 };
