@@ -47,6 +47,12 @@ module "cloudwatch" {
   # variables
   # globals 
   globalConfigs = var.globalConfigs
+
+  # cloudwatch common configs
+  cloudwatchCommonConfigs = var.cloudwatchCommonConfigs
+
+  # lambda names 
+  all_lambda_names = module.lambda.all_lambda_names
 }
 
 # Security and governance

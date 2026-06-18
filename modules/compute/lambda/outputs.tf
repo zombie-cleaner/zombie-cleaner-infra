@@ -5,3 +5,7 @@ output "lambda_arns_for_eventbridge" {
     if lambda.allow_eventbridge
   }
 }
+
+output "all_lambda_names" {
+  value = [for key, val in local.lambda_functions : key if val.enable_cloudwatch_logs == true]
+}

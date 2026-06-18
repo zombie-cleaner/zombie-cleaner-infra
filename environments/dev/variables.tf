@@ -19,6 +19,15 @@ variable "globalConfigs" {
 #         }))
 #     }
 
+# observability 
+
+# cloudwatch
+
+variable "cloudwatchCommonConfigs" {
+  type = object({
+    retention_in_days = number
+  })
+}
 
 # storage related services =======================================================================
 

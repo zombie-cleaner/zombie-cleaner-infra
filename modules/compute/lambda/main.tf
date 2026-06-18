@@ -1,16 +1,17 @@
 locals {
   lambda_functions = [
     {
-      name              = "delete_resource",
-      description       = "Lambda function to handle resource deletion events",
-      handler           = "index.handler",
-      runtime           = "nodejs18.x",
-      code_path         = "${path.module}/functions/delete_resource"
-      allow_eventbridge = true
-      layers            = ["api-helper", "package"]
+      name        = "delete_resource",
+      description = "Lambda function to handle resource deletion events",
+      handler     = "index.handler",
+      runtime     = "nodejs18.x",
+      code_path   = "${path.module}/functions/delete_resource"
+      layers      = ["api-helper", "package"]
       environment_variables = {
         "REGION" : "${var.globalConfigs.region}"
       }
+      allow_eventbridge      = true
+      enable_cloudwatch_logs = true
     },
     # {
     #   name              = "schedule_resource",
