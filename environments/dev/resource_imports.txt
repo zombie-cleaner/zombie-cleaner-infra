@@ -1,0 +1,2 @@
+* import cloudwatch logs , which are on aws not on tf state
+terraform import 'module.cloudwatch.aws_cloudwatch_log_group.lambda_cloudwatch_logs[\"delete_resource\"]' /aws/lambda/delete_resource-dev-zombie-cleaner
