@@ -7,5 +7,5 @@ output "lambda_arns_for_eventbridge" {
 }
 
 output "all_lambda_names" {
-  value = [for key, val in local.lambda_functions : key if val.enable_cloudwatch_logs == true]
+  value = [for val in local.lambda_functions : val.name if val.enable_cloudwatch_logs == true]
 }
