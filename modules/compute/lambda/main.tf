@@ -20,6 +20,7 @@ locals {
     #   runtime           = "nodejs18.x",
     #   code_path         = "${path.module}/functions/update_resource"
     #   allow_eventbridge = true
+    #   enable_cloudwatch_logs = true
     #   layers            = ["api-helper", "package"]
     #   environment_variables = {
     #     "REGION" : "${var.globalConfigs.region}"
