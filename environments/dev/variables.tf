@@ -10,6 +10,8 @@ variable "globalConfigs" {
 
 # Compute related services ========================================================================
 
+# EC2
+
 # Lambda
 # variable lambda_functions {
 #     type = map(object({

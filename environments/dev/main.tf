@@ -14,6 +14,17 @@ terraform {
 }
 
 # Compute module 
+
+# EC2 Instance
+module "ec2" {
+  source = "../../modules/compute/ec2"
+
+  # variables
+
+  # global configs
+  globalConfigs = var.globalConfigs
+}
+
 # lambda
 module "lambda" {
   source = "../../modules/compute/lambda"
