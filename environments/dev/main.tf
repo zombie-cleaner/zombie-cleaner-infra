@@ -26,7 +26,7 @@ terraform {
 
 #   # ec2 configs
 #   ec2Config = var.ec2Config
-}
+# }
 
 # lambda
 module "lambda" {
