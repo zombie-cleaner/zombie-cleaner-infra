@@ -1,0 +1,84 @@
+#!/bin/bash
+set -e
+
+# Variables (Terraform template variables are substituted below)
+APP_NAME="${app_name}"
+ENVIRONMENT="${environment}"
+REGION="${region}"
+JAR_BUCKET="${jar_s3_bucket}"
+JAR_KEY="${jar_s3_key}"
+JAVA_VERSION="${java_version}"
+APP_PORT="${spring_boot_port}"
+APP_DIR="/opt/${app_name}"
+JAR_PATH="$${APP_DIR}/${app_name}.jar"
+LOG_DIR="/var/log/${app_name}"
+
+echo "========================================"
+echo "  Bootstrap: ${app_name} (${environment})"
+echo "========================================"
+
+# Update system packages
+dnf update -y
+
+# Install Amazon Corretto (ARM64)
+if [ "$${JAVA_VERSION}" = "21" ]; then
+  dnf install -y java-21-amazon-corretto-devel
+elif [ "$${JAVA_VERSION}" = "17" ]; then
+  dnf install -y java-17-amazon-corretto-devel
+else
+  dnf install -y java-$${JAVA_VERSION}-amazon-corretto-devel
+fi
+
+# Verify Java installation
+java -version
+
+# Create application directories
+mkdir -p $${APP_DIR}
+mkdir -p $${LOG_DIR}
+
+# Download JAR from S3
+echo "Downloading JAR from s3://${jar_s3_bucket}/${jar_s3_key}..."
+aws s3 cp s3://${jar_s3_bucket}/${jar_s3_key} $${JAR_PATH}
+
+# Verify JAR downloaded
+if [ ! -f "$${JAR_PATH}" ]; then
+  echo "ERROR: JAR file not found at $${JAR_PATH}"
+  exit 1
+fi
+
+# Create systemd service for Spring Boot app
+cat > /etc/systemd/system/${app_name}.service << 'EOF'
+[Unit]
+Description=Spring Boot Application
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=APP_DIR_PLACEHOLDER
+ExecStart=/usr/bin/java -jar JAR_PATH_PLACEHOLDER --server.port=APP_PORT_PLACEHOLDER
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:LOG_DIR_PLACEHOLDER/app.log
+StandardError=append:LOG_DIR_PLACEHOLDER/error.log
+Environment=SPRING_PROFILES_ACTIVE=ENV_PLACEHOLDER
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Substitute values in systemd service (avoids Terraform template escaping issues)
+sed -i "s|APP_DIR_PLACEHOLDER|$${APP_DIR}|g" /etc/systemd/system/${app_name}.service
+sed -i "s|JAR_PATH_PLACEHOLDER|$${JAR_PATH}|g" /etc/systemd/system/${app_name}.service
+sed -i "s|APP_PORT_PLACEHOLDER|$${APP_PORT}|g" /etc/systemd/system/${app_name}.service
+sed -i "s|LOG_DIR_PLACEHOLDER|$${LOG_DIR}|g" /etc/systemd/system/${app_name}.service
+sed -i "s|ENV_PLACEHOLDER|$${ENVIRONMENT}|g" /etc/systemd/system/${app_name}.service
+
+# Reload systemd and enable service
+systemctl daemon-reload
+systemctl enable ${app_name}
+systemctl start ${app_name}
+
+echo "========================================"
+echo "  ${app_name} service started on port ${spring_boot_port}"
+echo "========================================"

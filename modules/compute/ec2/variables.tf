@@ -7,3 +7,17 @@ variable "globalConfigs" {
     policiesLocation = string
   })
 }
+
+# EC2 instance configuration ===================================================================
+variable "ec2Config" {
+  description = "Configuration for the Spring Boot EC2 instance"
+  type = object({
+    instance_type     = string
+    ssh_key_name      = string
+    app_jar_s3_bucket = string
+    app_jar_s3_key    = string
+    java_version      = optional(string, "17")
+    spring_boot_port  = optional(number, 8080)
+    ssh_allowed_cidr  = optional(string, "0.0.0.0/0")
+  })
+}

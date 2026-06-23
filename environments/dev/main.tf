@@ -16,13 +16,16 @@ terraform {
 # Compute module 
 
 # EC2 Instance
-module "ec2" {
-  source = "../../modules/compute/ec2"
+# module "ec2" {
+#   source = "../../modules/compute/ec2"
 
-  # variables
+#   # variables
 
-  # global configs
-  globalConfigs = var.globalConfigs
+#   # global configs
+#   globalConfigs = var.globalConfigs
+
+#   # ec2 configs
+#   ec2Config = var.ec2Config
 }
 
 # lambda
